@@ -118,7 +118,6 @@ prompt_grayscale() {
 
 ## Main prompt
 build_left_prompt_first_line() {
-  RETVAL=$?
   CURRENT_BG='NONE'
   prompt_status
   prompt_context
@@ -139,6 +138,7 @@ build_right_prompt() {
 }
 
 prompt_agnoster_precmd() {
+  RETVAL=$?
   vcs_info
   PROMPT='%{%f%b%k%}$(build_left_prompt_first_line)
 $(build_left_prompt_second_line) '
