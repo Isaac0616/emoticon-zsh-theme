@@ -107,6 +107,15 @@ prompt_virtualenv() {
   fi
 }
 
+prompt_emoticon() {
+  prompt_segment $PRIMARY_FG default " :3 "
+}
+
+prompt_grayscale() {
+  prompt_segment "10" default ""
+  prompt_segment "12" default ""
+}
+
 ## Main prompt
 build_left_prompt_first_line() {
   RETVAL=$?
@@ -120,7 +129,9 @@ build_left_prompt_first_line() {
 }
 
 build_left_prompt_second_line() {
-  echo ':3'
+  prompt_emoticon
+  prompt_grayscale
+  prompt_end
 }
 
 build_right_prompt() {
