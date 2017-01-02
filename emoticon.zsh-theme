@@ -149,6 +149,8 @@ prompt_agnoster_precmd() {
   PROMPT='%{%f%b%k%}$(build_left_prompt_first_line)
 $(build_left_prompt_second_line) '
   RPROMPT="$LINE_UP%f%b%k$(build_right_prompt)$LINE_DOWN"
+  # add a new line before prompt
+  print ""
 }
 
 prompt_agnoster_setup() {
