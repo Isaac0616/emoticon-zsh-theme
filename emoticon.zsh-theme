@@ -12,6 +12,9 @@ CROSS="\u2718"
 LIGHTNING="\u26a1\ufe0e"
 GEAR="\u2699\ufe0e"
 
+LINE_UP='%{'$'\e[1A''%}'
+LINE_DOWN='%{'$'\e[1B''%}'
+
 # Begin a segment
 # Takes two arguments, background and foreground. Both can be omitted,
 # rendering default background/foreground.
@@ -105,7 +108,7 @@ prompt_virtualenv() {
 }
 
 ## Main prompt
-prompt_agnoster_main() {
+build_left_prompt_first_line() {
   RETVAL=$?
   CURRENT_BG='NONE'
   prompt_status
@@ -116,9 +119,19 @@ prompt_agnoster_main() {
   prompt_end
 }
 
+build_left_prompt_second_line() {
+  echo ':3'
+}
+
+build_right_prompt() {
+  echo '<<<<'
+}
+
 prompt_agnoster_precmd() {
   vcs_info
-  PROMPT='%{%f%b%k%}$(prompt_agnoster_main) '
+  PROMPT='%{%f%b%k%}$(build_left_prompt_first_line)
+$(build_left_prompt_second_line) '
+  RPROMPT="$LINE_UP%f%b%k$(build_right_prompt)$LINE_DOWN"
 }
 
 prompt_agnoster_setup() {
