@@ -108,7 +108,13 @@ prompt_virtualenv() {
 }
 
 prompt_emoticon() {
-  prompt_segment $PRIMARY_FG default " :3 "
+  if [[ $RETVAL -ne 0 ]]; then
+    EMOTICON=" (╯°Д°)╯ ┴─┴ "
+  else
+    EMOTICON=" _(┐「ε:)_ "
+  fi
+
+  prompt_segment $PRIMARY_FG default $EMOTICON
 }
 
 prompt_grayscale() {
