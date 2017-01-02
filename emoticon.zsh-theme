@@ -9,8 +9,8 @@ PLUSMINUS="\u00b1"
 BRANCH="\ue0a0"
 DETACHED="\u27a6"
 CROSS="\u2718"
-LIGHTNING="\u26a1"
-GEAR="\u2699"
+LIGHTNING="\u26a1\ufe0e"
+GEAR="\u2699\ufe0e"
 
 # Begin a segment
 # Takes two arguments, background and foreground. Both can be omitted,
