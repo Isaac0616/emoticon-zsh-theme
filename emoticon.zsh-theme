@@ -111,7 +111,11 @@ prompt_emoticon() {
   if [[ $RETVAL -ne 0 ]]; then
     EMOTICON=" (╯°Д°)╯ ┴─┴ "
   else
-    EMOTICON=" _(┐「ε:)_ "
+    if [[ $PRERETVAL -ne 0 ]]; then
+      EMOTICON=" ┬─┬ ノ('-'ノ) "
+    else
+      EMOTICON=" _(┐「ε:)_ "
+    fi
   fi
 
   prompt_segment $PRIMARY_FG default $EMOTICON
@@ -145,6 +149,9 @@ build_right_prompt() {
 
 prompt_agnoster_precmd() {
   RETVAL=$?
+  PRERETVAL=$TMPRETVAL
+  TMPRETVAL=$RETVAL
+
   vcs_info
   PROMPT='%{%f%b%k%}$(build_left_prompt_first_line)
 $(build_left_prompt_second_line) '
