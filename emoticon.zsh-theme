@@ -147,6 +147,35 @@ prompt_time() {
   right_prompt_segment white black $time_format
 }
 
+function zle-keymap-select zle-line-init zle-line-finish {
+  # The terminal must be in application mode when ZLE is active for $terminfo
+  # values to be valid.
+  # if (( ${+terminfo[smkx]} )); then
+    # printf '%s' ${terminfo[smkx]}
+  # fi
+  # if (( ${+terminfo[rmkx]} )); then
+    # printf '%s' ${terminfo[rmkx]}
+  # fi
+
+  if [[ ${KEYMAP} == "vicmd" ]]; then
+    RPROMPT=${RPROMPT/$VI_INSERT_SEGMENT/$VI_NORMAL_SEGMENT}
+  elif [[ ${KEYMAP} == "main" || ${KEYMAP} == "viins" ]]; then
+    RPROMPT=${RPROMPT/$VI_NORMAL_SEGMENT/$VI_INSERT_SEGMENT}
+  fi
+
+  zle reset-prompt
+  zle -R
+}
+zle -N zle-line-init
+zle -N zle-line-finish
+zle -N zle-keymap-select
+
+VI_INSERT_SEGMENT=$(right_prompt_segment "240" white " INSERT ")
+VI_NORMAL_SEGMENT=$(right_prompt_segment yellow white " NORMAL ")
+prompt_vi_mode() {
+  print -n $VI_INSERT_SEGMENT
+}
+
 ## Main prompt
 build_left_prompt_first_line() {
   CURRENT_BG='NONE'
@@ -165,6 +194,7 @@ build_left_prompt_second_line() {
 }
 
 build_right_prompt() {
+  prompt_vi_mode
   prompt_time
 }
 
