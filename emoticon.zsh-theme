@@ -111,7 +111,7 @@ prompt_status() {
   [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}$LIGHTNING"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}$GEAR"
 
-  [[ -n "$symbols" ]] && left_prompt_segment $PRIMARY_FG default " $symbols "
+  [[ -n "$symbols" ]] && left_prompt_segment $PRIMARY_FG default " $symbols"
 }
 
 # Display current virtual environment
