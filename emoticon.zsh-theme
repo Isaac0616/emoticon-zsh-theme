@@ -5,7 +5,7 @@ PRIMARY_FG=black
 
 # Characters
 LEFT_SEGMENT_SEPARATOR="\ue0b0"
-RIGHT_SEGMENT_SEPARATOR=$'\ue0b2'
+RIGHT_SEGMENT_SEPARATOR="\ue0b2"
 PLUSMINUS="\u00b1"
 BRANCH="\ue0a0"
 DETACHED="\u27a6"
@@ -16,7 +16,7 @@ GEAR="\u2699\ufe0e"
 LINE_UP='%{'$'\e[1A''%}'
 LINE_DOWN='%{'$'\e[1B''%}'
 
-# Begin a segment
+# Begin a left segment
 # Takes two arguments, background and foreground. Both can be omitted,
 # rendering default background/foreground.
 left_prompt_segment() {
@@ -41,6 +41,21 @@ left_prompt_end() {
   fi
   print -n "%{%f%}"
   CURRENT_BG=''
+}
+
+# Begin a right segment
+# Takes two arguments, background and foreground. Both can be omitted,
+# rendering default background/foreground.
+right_prompt_segment() {
+  local bg fg
+  [[ -n $1 ]] && bg="%K{$1}" || bg="%k"
+  [[ -n $2 ]] && fg="%F{$2}" || fg="%f"
+  if [[ $1 != $CURRENT_BG ]]; then
+    print -n "%{%F{$1}%}$RIGHT_SEGMENT_SEPARATOR"
+  fi
+
+  CURRENT_BG=$1
+  [[ -n $3 ]] && print -n "%{$bg%}%{$fg%}$3"
 }
 
 ### Prompt components
@@ -127,6 +142,10 @@ prompt_grayscale() {
   left_prompt_segment "12" default ""
 }
 
+prompt_hello() {
+  right_prompt_segment blue black " hello "
+}
+
 ## Main prompt
 build_left_prompt_first_line() {
   CURRENT_BG='NONE'
@@ -145,7 +164,7 @@ build_left_prompt_second_line() {
 }
 
 build_right_prompt() {
-  echo '<<<<'
+  prompt_hello
 }
 
 prompt_agnoster_precmd() {
