@@ -4,7 +4,8 @@ CURRENT_BG='NONE'
 PRIMARY_FG=black
 
 # Characters
-SEGMENT_SEPARATOR="\ue0b0"
+LEFT_SEGMENT_SEPARATOR="\ue0b0"
+RIGHT_SEGMENT_SEPARATOR=$'\ue0b2'
 PLUSMINUS="\u00b1"
 BRANCH="\ue0a0"
 DETACHED="\u27a6"
@@ -18,12 +19,12 @@ LINE_DOWN='%{'$'\e[1B''%}'
 # Begin a segment
 # Takes two arguments, background and foreground. Both can be omitted,
 # rendering default background/foreground.
-prompt_segment() {
+left_prompt_segment() {
   local bg fg
   [[ -n $1 ]] && bg="%K{$1}" || bg="%k"
   [[ -n $2 ]] && fg="%F{$2}" || fg="%f"
   if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then
-    print -n "%{$bg%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR%{$fg%}"
+    print -n "%{$bg%F{$CURRENT_BG}%}$LEFT_SEGMENT_SEPARATOR%{$fg%}"
   else
     print -n "%{$bg%}%{$fg%}"
   fi
@@ -32,9 +33,9 @@ prompt_segment() {
 }
 
 # End the prompt, closing any open segments
-prompt_end() {
+left_prompt_end() {
   if [[ -n $CURRENT_BG ]]; then
-    print -n "%{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
+    print -n "%{%k%F{$CURRENT_BG}%}$LEFT_SEGMENT_SEPARATOR"
   else
     print -n "%{%k%}"
   fi
@@ -50,7 +51,7 @@ prompt_context() {
   local user=`whoami`
 
   if [[ "$user" != "$DEFAULT_USER" || -n "$SSH_CONNECTION" ]]; then
-    prompt_segment $PRIMARY_FG default " %(!.%{%F{yellow}%}.)$user@%m "
+    left_prompt_segment $PRIMARY_FG default " %(!.%{%F{yellow}%}.)$user@%m "
   fi
 }
 
@@ -74,14 +75,14 @@ prompt_git() {
     else
       ref="$DETACHED ${ref/.../}"
     fi
-    prompt_segment $color $PRIMARY_FG
+    left_prompt_segment $color $PRIMARY_FG
     print -Pn " $ref"
   fi
 }
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment blue $PRIMARY_FG ' %~ '
+  left_prompt_segment blue $PRIMARY_FG ' %~ '
 }
 
 # Status:
@@ -95,14 +96,14 @@ prompt_status() {
   [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}$LIGHTNING"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}$GEAR"
 
-  [[ -n "$symbols" ]] && prompt_segment $PRIMARY_FG default " $symbols "
+  [[ -n "$symbols" ]] && left_prompt_segment $PRIMARY_FG default " $symbols "
 }
 
 # Display current virtual environment
 prompt_virtualenv() {
   if [[ -n $VIRTUAL_ENV ]]; then
     color=cyan
-    prompt_segment $color $PRIMARY_FG
+    left_prompt_segment $color $PRIMARY_FG
     print -Pn " $(basename $VIRTUAL_ENV) "
   fi
 }
@@ -118,12 +119,12 @@ prompt_emoticon() {
     fi
   fi
 
-  prompt_segment $PRIMARY_FG default $EMOTICON
+  left_prompt_segment $PRIMARY_FG default $EMOTICON
 }
 
 prompt_grayscale() {
-  prompt_segment "10" default ""
-  prompt_segment "12" default ""
+  left_prompt_segment "10" default ""
+  left_prompt_segment "12" default ""
 }
 
 ## Main prompt
@@ -134,13 +135,13 @@ build_left_prompt_first_line() {
   prompt_virtualenv
   prompt_dir
   prompt_git
-  prompt_end
+  left_prompt_end
 }
 
 build_left_prompt_second_line() {
   prompt_emoticon
   prompt_grayscale
-  prompt_end
+  left_prompt_end
 }
 
 build_right_prompt() {
