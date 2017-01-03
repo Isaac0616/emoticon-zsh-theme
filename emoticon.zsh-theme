@@ -142,8 +142,9 @@ prompt_grayscale() {
   left_prompt_segment "12" default ""
 }
 
-prompt_hello() {
-  right_prompt_segment blue black " hello "
+prompt_time() {
+  local time_format=" %D{%H:%M:%S} "
+  right_prompt_segment white black $time_format
 }
 
 ## Main prompt
@@ -164,7 +165,7 @@ build_left_prompt_second_line() {
 }
 
 build_right_prompt() {
-  prompt_hello
+  prompt_time
 }
 
 prompt_agnoster_precmd() {
