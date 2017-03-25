@@ -212,6 +212,8 @@ $(build_left_prompt_second_line) '
 }
 
 prompt_agnoster_setup() {
+  setopt prompt_subst
+
   autoload -Uz add-zsh-hook
   autoload -Uz vcs_info
 
